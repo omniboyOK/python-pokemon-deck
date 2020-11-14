@@ -30,6 +30,28 @@ def getAllCards():
     return ('', 200)
 
 
+@app.route("/check", methods=['POST'])
+def checkDeck():
+    data = request.get_json(force=True)
+    print(data['item_id'])
+    deck = data['deck']
+    item_id = data['item_id']
+    count = 0
+    for card in deck:
+        if card['id'] == item_id:
+            count = count + 1
+    if count >= 4:
+        return jsonify({'check': False}), 200
+    else:
+        return jsonify({'check': True}), 200
+
+## TODO: Funcion que descargue el mazo en un excel
+## Recibir un mazo en el body
+## Pedir por cada carta más datos usando la libreria de pokemon
+## Con esos datos armar un excel
+
+## TODO: Funcion que compare tambien por el nombre
+
 @app.route("/card", methods=['GET'])
 def getCard():
     name = request.args.get('name')
@@ -47,6 +69,7 @@ def getCard():
             'id': card.id
         })
     return (jsonify(pokelista), 200)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
